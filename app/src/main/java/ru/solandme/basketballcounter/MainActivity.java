@@ -17,8 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initialTeams() {
         teamOne = new Team();
-        teamOne.setScore(0);
         teamTwo = new Team();
-        teamTwo.setScore(0);
+
     }
 }

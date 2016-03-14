@@ -5,6 +5,10 @@ public class Team {
     private int score;
     private String name;
 
+    public Team() {
+        score = 0;
+    }
+
     public int getScore() {
         return score;
     }
