@@ -33,6 +33,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/scoreTeamOne"
+                android:text="0"
+                android:textSize="80sp"
                 android:layout_gravity="center"/>
             <Button
                 android:layout_width="match_parent"
@@ -71,7 +73,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/scoreTeamTwo"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:textSize="80sp"
+                android:text="0"/>
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
