@@ -27,7 +27,9 @@ public class MainActivity extends AppCompatActivity{
 
     private void initialTeams() {
         teamOne = new Team();
+        teamOne.setName(getString(R.string.team_a));
         teamTwo = new Team();
+        teamTwo.setName(getString(R.string.team_b));
     }
 
     public void onClickPlusBtn(View view) {
@@ -58,7 +60,8 @@ public class MainActivity extends AppCompatActivity{
                 scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
                 break;
             case R.id.btnClearScore:
-                initialTeams();
+                teamOne.setScore(0);
+                teamTwo.setScore(0);
                 scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
                 scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
                 break;
