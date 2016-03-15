@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     Team teamOne, teamTwo;
     TextView scoreTeamOne, scoreTeamTwo;
@@ -17,11 +17,10 @@ public class MainActivity extends AppCompatActivity{
 
         scoreTeamOne = (TextView) findViewById(R.id.scoreTeamOne);
         scoreTeamTwo = (TextView) findViewById(R.id.scoreTeamTwo);
-
         initialTeams();
     }
 
-    public void addPoints(Team team, int points){
+    public void addPoints(Team team, int points) {
         team.setScore(team.getScore() + points);
     }
 
@@ -32,9 +31,29 @@ public class MainActivity extends AppCompatActivity{
         teamTwo.setName(getString(R.string.team_b));
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("scoreTeamA", teamOne.getScore());
+        outState.putInt("scoreTeamB", teamTwo.getScore());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState == null) {
+            initialTeams();
+        } else {
+            teamOne.setScore(savedInstanceState.getInt("scoreTeamA"));
+            scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
+            teamTwo.setScore(savedInstanceState.getInt("scoreTeamB"));
+            scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
+        }
+    }
+
     public void onClickPlusBtn(View view) {
-        int s;
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btnPlusThreePointToTeamOne:
                 addPoints(teamOne, 3);
                 scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
@@ -67,5 +86,7 @@ public class MainActivity extends AppCompatActivity{
                 break;
 
         }
+
+
     }
 }
