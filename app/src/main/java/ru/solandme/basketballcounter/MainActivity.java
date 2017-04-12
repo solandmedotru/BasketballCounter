@@ -7,8 +7,11 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    Team teamOne, teamTwo;
-    TextView scoreTeamOne, scoreTeamTwo;
+    Game game;
+    Team teamOne;
+    Team teamTwo;
+    TextView scoreTeamOne;
+    TextView scoreTeamTwo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,11 +20,12 @@ public class MainActivity extends AppCompatActivity {
 
         scoreTeamOne = (TextView) findViewById(R.id.scoreTeamOne);
         scoreTeamTwo = (TextView) findViewById(R.id.scoreTeamTwo);
-        initialTeams();
+        initialGame();
     }
 
-    public void addPoints(Team team, int points) {
-        team.setScore(team.getScore() + points);
+    private void initialGame() {
+        game = new Game();
+        initialTeams();
     }
 
     private void initialTeams() {
@@ -31,11 +35,17 @@ public class MainActivity extends AppCompatActivity {
         teamTwo.setName(getString(R.string.team_b));
     }
 
+    public void addPoints(Team team, int points) {
+        team.setScore(team.getScore() + points);
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("scoreTeamA", teamOne.getScore());
         outState.putInt("scoreTeamB", teamTwo.getScore());
+        outState.putInt("timer", game.getTimeCounter());
+        outState.putInt("period", game.getPeriod());
     }
 
     @Override
@@ -43,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         if (savedInstanceState == null) {
-            initialTeams();
+            initialGame();
         } else {
             teamOne.setScore(savedInstanceState.getInt("scoreTeamA"));
             scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
