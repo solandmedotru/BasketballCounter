@@ -2,7 +2,9 @@ package ru.solandme.basketballcounter;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.TextKeyListener;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -12,6 +14,8 @@ public class MainActivity extends AppCompatActivity {
     Team teamTwo;
     TextView scoreTeamOne;
     TextView scoreTeamTwo;
+    EditText teamOneName;
+    EditText teamTwoName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
         scoreTeamOne = (TextView) findViewById(R.id.scoreTeamOne);
         scoreTeamTwo = (TextView) findViewById(R.id.scoreTeamTwo);
+        teamOneName = (EditText) findViewById(R.id.teamNameOne);
+        teamTwoName = (EditText) findViewById(R.id.teamNameTwo);
         initialGame();
     }
 
@@ -96,6 +102,28 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
         }
+
+        teamOneName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    TextKeyListener.clear((teamOneName).getText());
+                    teamOne.setName((teamOneName).getText().toString());
+                }
+            }
+        });
+
+        teamTwoName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    TextKeyListener.clear((teamTwoName).getText());
+                    teamTwo.setName((teamTwoName).getText().toString());
+                }
+            }
+        });
 
 
     }
