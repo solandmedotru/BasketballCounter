@@ -1,7 +1,7 @@
 package ru.solandme.basketballcounter;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.method.TextKeyListener;
 import android.view.View;
 import android.widget.EditText;
@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
     EditText teamTwoName;
     CountdownView mCvCountdownView;
 
+    boolean isTimerRunning = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
     }
 
     private void initialTimer() {
-        mCvCountdownView = (CountdownView)findViewById(R.id.cv_countdownViewTest211);
+        mCvCountdownView = (CountdownView) findViewById(R.id.cv_countdownViewTest211);
     }
 
     private void initialGame() {
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
         super.onSaveInstanceState(outState);
         outState.putInt("scoreTeamA", teamOne.getScore());
         outState.putInt("scoreTeamB", teamTwo.getScore());
-        outState.putInt("timer", game.getTimeCounter());
+        outState.putLong("timer", game.getTimeCounter());
         outState.putInt("period", game.getPeriod());
     }
 
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
     }
 
     public void onClickPlusBtn(View view) {
+
         switch (view.getId()) {
             case R.id.btnPlusThreePointToTeamOne:
                 addPoints(teamOne, 3);
@@ -111,13 +114,28 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
 //                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
 //                break;
             case R.id.btn12min:
-
+                updateCountDownTimer(game, 12 * 60 * 1000);
+                break;
+            case R.id.btnPlus1Min:
+                updateCountDownTimer(game, 60 * 1000);
+                break;
+            case R.id.btn20min:
+                updateCountDownTimer(game, 20 * 60 * 1000);
+                break;
             case R.id.btnStart:
-                if(mCvCountdownView.getRemainTime() == 0) {
-                    mCvCountdownView.start(game.getTimeCounter());
-                    mCvCountdownView.setOnCountdownEndListener(this);
-                } else mCvCountdownView.stop();
-
+                if (isTimerRunning) {
+                    mCvCountdownView.stop();
+                    isTimerRunning = false;
+                    game.setTimeCounter(mCvCountdownView.getRemainTime());
+                } else {
+                    if(game.getTimeCounter() != 0){
+                        mCvCountdownView.start(game.getTimeCounter());
+                        isTimerRunning = true;
+                        mCvCountdownView.setOnCountdownEndListener(this);
+                        game.setTimeCounter(mCvCountdownView.getRemainTime());
+                    }
+                }
+                break;
         }
 
         teamOneName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -143,6 +161,15 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
         });
 
 
+    }
+
+    private void updateCountDownTimer(Game game, long time) {
+        long currentTimeCounter = game.getTimeCounter();
+        game.setTimeCounter(currentTimeCounter + time);
+        mCvCountdownView.updateShow(game.getTimeCounter());
+        if(isTimerRunning){
+            mCvCountdownView.start(game.getTimeCounter());
+        }
     }
 
     @Override

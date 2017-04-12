@@ -2,7 +2,7 @@ package ru.solandme.basketballcounter;
 
 public class Game {
 
-    private int timeCounter;
+    private long timeCounter;
     private int period;
 
     public Game() {
@@ -10,16 +10,16 @@ public class Game {
         period = 1;
     }
 
-    public Game(int timeCounter, int period) {
+    public Game(long timeCounter, int period) {
         this.timeCounter = timeCounter;
         this.period = period;
     }
 
-    public int getTimeCounter() {
+    public long getTimeCounter() {
         return timeCounter;
     }
 
-    public void setTimeCounter(int timeCounter) {
+    public void setTimeCounter(long timeCounter) {
         this.timeCounter = timeCounter;
     }
 
