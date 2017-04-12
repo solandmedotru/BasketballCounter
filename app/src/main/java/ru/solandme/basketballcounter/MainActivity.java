@@ -6,8 +6,11 @@ import android.text.method.TextKeyListener;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import cn.iwgang.countdownview.CountdownView;
+
+public class MainActivity extends AppCompatActivity implements CountdownView.OnCountdownEndListener {
 
     Game game;
     Team teamOne;
@@ -27,6 +30,16 @@ public class MainActivity extends AppCompatActivity {
         teamOneName = (EditText) findViewById(R.id.teamNameOne);
         teamTwoName = (EditText) findViewById(R.id.teamNameTwo);
         initialGame();
+
+        initialTimer();
+    }
+
+    private void initialTimer() {
+        CountdownView mCvCountdownView = (CountdownView)findViewById(R.id.cv_countdownViewTest1);
+
+        mCvCountdownView.start(5000);
+        mCvCountdownView.setOnCountdownEndListener(this);
+
     }
 
     private void initialGame() {
@@ -94,12 +107,12 @@ public class MainActivity extends AppCompatActivity {
                 addPoints(teamTwo, 1);
                 scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
                 break;
-            case R.id.btnClearScore:
-                teamOne.setScore(0);
-                teamTwo.setScore(0);
-                scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
-                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
-                break;
+//            case R.id.btnClearScore:
+//                teamOne.setScore(0);
+//                teamTwo.setScore(0);
+//                scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
+//                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
+//                break;
 
         }
 
@@ -126,5 +139,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public void onEnd(CountdownView cv) {
+        Toast.makeText(getApplicationContext(), "GameOver", Toast.LENGTH_LONG).show();
     }
 }
