@@ -15,10 +15,12 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
     Game game;
     Team teamOne;
     Team teamTwo;
+
     TextView scoreTeamOne;
     TextView scoreTeamTwo;
     EditText teamOneName;
     EditText teamTwoName;
+    CountdownView mCvCountdownView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,21 +32,16 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
         teamOneName = (EditText) findViewById(R.id.teamNameOne);
         teamTwoName = (EditText) findViewById(R.id.teamNameTwo);
         initialGame();
-
-        initialTimer();
     }
 
     private void initialTimer() {
-        CountdownView mCvCountdownView = (CountdownView)findViewById(R.id.cv_countdownViewTest1);
-
-        mCvCountdownView.start(5000);
-        mCvCountdownView.setOnCountdownEndListener(this);
-
+        mCvCountdownView = (CountdownView)findViewById(R.id.cv_countdownViewTest211);
     }
 
     private void initialGame() {
         game = new Game();
         initialTeams();
+        initialTimer();
     }
 
     private void initialTeams() {
@@ -113,6 +110,13 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
 //                scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
 //                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
 //                break;
+            case R.id.btn12min:
+
+            case R.id.btnStart:
+                if(mCvCountdownView.getRemainTime() == 0) {
+                    mCvCountdownView.start(game.getTimeCounter());
+                    mCvCountdownView.setOnCountdownEndListener(this);
+                } else mCvCountdownView.stop();
 
         }
 
