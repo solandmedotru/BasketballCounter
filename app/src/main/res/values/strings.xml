@@ -10,6 +10,6 @@
     <string name="time_up_mesaage">The time is up. Add time if you want to continue the game!</string>
     <string name="start_stop">Start/Stop</string>
     <string name="reset_all">Reset all</string>
-    <string name="team_name">Team Name</string>
+    <string name="edit_team">Edit Team</string>
     <string name="enter_team_name">Enter Team Name</string>
 </resources>

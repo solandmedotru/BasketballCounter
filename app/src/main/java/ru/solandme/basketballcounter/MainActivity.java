@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.method.TextKeyListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -239,16 +238,17 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
         final EditText name = (EditText) dialogView.findViewById(R.id.editName);
         name.setText(team.getName());
 
-        dialogBuilder.setTitle(R.string.team_name);
+        dialogBuilder.setTitle(R.string.edit_team);
+        dialogBuilder.setIcon(R.mipmap.ic_launcher);
         dialogBuilder.setMessage(R.string.enter_team_name);
-        dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 team.setName(name.getText().toString());
                 updateUI();
                 dialog.dismiss();
             }
         });
-        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        dialogBuilder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 dialog.dismiss();
             }
