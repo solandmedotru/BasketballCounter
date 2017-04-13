@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Баскетбольный счет</string>
-    <string name="_2_points">+2 Очка</string>
-    <string name="_3_points">+3 Очка</string>
     <string name="clear_score">Сбросить счет</string>
     <string name="free_throw">Штрафной</string>
     <string name="team_a">Команда А</string>
@@ -12,5 +10,6 @@
     <string name="start_stop">Старт/Стоп</string>
     <string name="enter_team_name">Введите название команды</string>
     <string name="reset_all">Рестарт</string>
-    <string name="team_name">Редактирование команды</string>
+    <string name="team_name">Название команды</string>
+    <string name="edit_team">Редактирование команды</string>
 </resources>
