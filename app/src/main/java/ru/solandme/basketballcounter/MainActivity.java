@@ -1,6 +1,8 @@
 package ru.solandme.basketballcounter;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.TextKeyListener;
 import android.view.View;
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
         }
     }
 
-    public void onClickPlusBtn(View view) {
+    public void onClickBtn(View view) {
 
         switch (view.getId()) {
             case R.id.btnPlusThreePointToTeamOne:
@@ -113,14 +115,17 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
 //                scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
 //                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
 //                break;
-            case R.id.btn12min:
-                updateCountDownTimer(game, 12 * 60 * 1000);
-                break;
-            case R.id.btnPlus1Min:
+            case R.id.arrowUpOneMin:
                 updateCountDownTimer(game, 60 * 1000);
                 break;
-            case R.id.btn20min:
-                updateCountDownTimer(game, 20 * 60 * 1000);
+            case R.id.arrowDownOneMin:
+                updateCountDownTimer(game, -60 * 1000);
+                break;
+            case R.id.arrowUpTenMin:
+                updateCountDownTimer(game, 10 * 60 * 1000);
+                break;
+            case R.id.arrowDownTenMin:
+                updateCountDownTimer(game, -10 * 60 * 1000);
                 break;
             case R.id.btnStart:
                 if (isTimerRunning) {
@@ -128,11 +133,10 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
                     isTimerRunning = false;
                     game.setTimeCounter(mCvCountdownView.getRemainTime());
                 } else {
-                    if(game.getTimeCounter() != 0){
+                    if (game.getTimeCounter() != 0) {
                         mCvCountdownView.start(game.getTimeCounter());
                         isTimerRunning = true;
                         mCvCountdownView.setOnCountdownEndListener(this);
-                        game.setTimeCounter(mCvCountdownView.getRemainTime());
                     }
                 }
                 break;
@@ -165,15 +169,31 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
 
     private void updateCountDownTimer(Game game, long time) {
         long currentTimeCounter = game.getTimeCounter();
-        game.setTimeCounter(currentTimeCounter + time);
+        if (currentTimeCounter + time >= 0) {
+            game.setTimeCounter(currentTimeCounter + time);
+        }
+
         mCvCountdownView.updateShow(game.getTimeCounter());
-        if(isTimerRunning){
+        if (isTimerRunning) {
             mCvCountdownView.start(game.getTimeCounter());
         }
     }
 
     @Override
     public void onEnd(CountdownView cv) {
-        Toast.makeText(getApplicationContext(), "GameOver", Toast.LENGTH_LONG).show();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Time is Up!")
+                .setMessage("The time is up. Add time if you want to continue the game!")
+                .setIcon(R.mipmap.ic_launcher)
+                .setCancelable(false)
+                .setNegativeButton(android.R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }
