@@ -5,25 +5,31 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.TextKeyListener;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.Locale;
 
 import cn.iwgang.countdownview.CountdownView;
 
 public class MainActivity extends AppCompatActivity implements CountdownView.OnCountdownEndListener {
 
-    Game game;
-    Team teamOne;
-    Team teamTwo;
+    private Game game;
+    private Team teamOne;
+    private Team teamTwo;
 
-    TextView scoreTeamOne;
-    TextView scoreTeamTwo;
-    EditText teamOneName;
-    EditText teamTwoName;
-    CountdownView mCvCountdownView;
+    private TextView scoreTeamOne;
+    private TextView scoreTeamTwo;
+    private TextView teamOneName;
+    private TextView teamTwoName;
+    private CountdownView mCvCountdownView;
 
-    boolean isTimerRunning = false;
+    private boolean isTimerRunning = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,33 +38,37 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
 
         scoreTeamOne = (TextView) findViewById(R.id.scoreTeamOne);
         scoreTeamTwo = (TextView) findViewById(R.id.scoreTeamTwo);
-        teamOneName = (EditText) findViewById(R.id.teamNameOne);
-        teamTwoName = (EditText) findViewById(R.id.teamNameTwo);
+        teamOneName = (TextView) findViewById(R.id.teamNameOne);
+        teamTwoName = (TextView) findViewById(R.id.teamNameTwo);
+        mCvCountdownView = (CountdownView) findViewById(R.id.cv_countdownViewTest211);
+
         initialGame();
+        updateUI();
     }
 
     private void initialGame() {
         game = new Game();
         initialTeams();
-        initialTimer();
     }
 
     private void initialTeams() {
-        teamOne = new Team();
-        teamOne.setName(getString(R.string.team_a));
-        scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
-
-        teamTwo = new Team();
-        teamTwo.setName(getString(R.string.team_b));
-        scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
+        teamOne = new Team(getString(R.string.team_a));
+        teamTwo = new Team(getString(R.string.team_b));
     }
 
-    private void initialTimer() {
-        mCvCountdownView = (CountdownView) findViewById(R.id.cv_countdownViewTest211);
+    private void updateUI() {
+        teamOneName.setText(teamOne.getName());
+        teamTwoName.setText(teamTwo.getName());
+        scoreTeamOne.setText(String.format(Locale.getDefault(), "%d", teamOne.getScore()));
+        scoreTeamTwo.setText(String.format(Locale.getDefault(), "%d", teamTwo.getScore()));
+        mCvCountdownView.updateShow(game.getTimeCounter());
     }
 
     public void addPoints(Team team, int points) {
-        if (team.getScore() + points >= 0) team.setScore(team.getScore() + points);
+        if (team.getScore() + points >= 0) {
+            team.setScore(team.getScore() + points);
+        } else team.setScore(0);
+        updateUI();
     }
 
     @Override
@@ -82,15 +92,11 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
             game = savedInstanceState.getParcelable("Game");
             teamOne = savedInstanceState.getParcelable("TeamOne");
             teamTwo = savedInstanceState.getParcelable("TeamTwo");
-
-            scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
-            scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
             isTimerRunning = savedInstanceState.getBoolean("isTimerRunning");
 
-            if(isTimerRunning){
+            updateUI();
+            if (isTimerRunning) {
                 mCvCountdownView.start(game.getTimeCounter());
-            } else {
-                mCvCountdownView.updateShow(game.getTimeCounter());
             }
         }
     }
@@ -100,59 +106,40 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
         switch (view.getId()) {
             case R.id.btnPlusThreePointToTeamOne:
                 addPoints(teamOne, 3);
-                scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
                 break;
             case R.id.btnPlusTwoPointToTeamOne:
                 addPoints(teamOne, 2);
-                scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
                 break;
             case R.id.btnPlusOnePointToTeamOne:
                 addPoints(teamOne, 1);
-                scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
                 break;
             case R.id.btnPlusThreePointToTeamTwo:
                 addPoints(teamTwo, 3);
-                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
                 break;
             case R.id.btnPlusTwoPointToTeamTwo:
                 addPoints(teamTwo, 2);
-                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
                 break;
             case R.id.btnPlusOnePointToTeamTwo:
                 addPoints(teamTwo, 1);
-                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
                 break;
-
             case R.id.btnMinusThreePointFromTeamOne:
                 addPoints(teamOne, -3);
-                scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
                 break;
             case R.id.btnMinusTwoPointFromTeamOne:
                 addPoints(teamOne, -2);
-                scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
                 break;
             case R.id.btnMinusOnePointFromTeamOne:
                 addPoints(teamOne, -1);
-                scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
                 break;
             case R.id.btnMinusThreePointFromTeamTwo:
                 addPoints(teamTwo, -3);
-                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
                 break;
             case R.id.btnMinusTwoPointFromTeamTwo:
                 addPoints(teamTwo, -2);
-                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
                 break;
             case R.id.btnMinusOnePointFromTeamTwo:
                 addPoints(teamTwo, -1);
-                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
                 break;
-//            case R.id.btnClearScore:
-//                teamOne.setScore(0);
-//                teamTwo.setScore(0);
-//                scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
-//                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
-//                break;
             case R.id.arrowUpOneMin:
                 updateCountDownTimer(game, 60 * 1000);
                 break;
@@ -179,39 +166,15 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
                 }
                 break;
         }
-
-        teamOneName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    TextKeyListener.clear((teamOneName).getText());
-                    teamOne.setName((teamOneName).getText().toString());
-                }
-            }
-        });
-
-        teamTwoName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    TextKeyListener.clear((teamTwoName).getText());
-                    teamTwo.setName((teamTwoName).getText().toString());
-                }
-            }
-        });
-
-
     }
 
     private void updateCountDownTimer(Game game, long time) {
         long currentTimeCounter = game.getTimeCounter();
         if (currentTimeCounter + time >= 0) {
             game.setTimeCounter(currentTimeCounter + time);
-        }
+        } else game.setTimeCounter(0);
 
-        mCvCountdownView.updateShow(game.getTimeCounter());
+        updateUI();
         if (isTimerRunning) {
             mCvCountdownView.start(game.getTimeCounter());
         }
@@ -221,8 +184,8 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
     public void onEnd(CountdownView cv) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Time is Up!")
-                .setMessage("The time is up. Add time if you want to continue the game!")
+        builder.setTitle(R.string.time_up)
+                .setMessage(R.string.time_up_mesaage)
                 .setIcon(R.mipmap.ic_launcher)
                 .setCancelable(false)
                 .setNegativeButton(android.R.string.ok,
@@ -233,5 +196,64 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
                         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.actionReset:
+                initialGame();
+                updateUI();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    public void onClickTeamName(View view) {
+        switch (view.getId()) {
+            case R.id.teamNameOne:
+                showEditTeamNameDialog(teamOne);
+                break;
+            case R.id.teamNameTwo:
+                showEditTeamNameDialog(teamTwo);
+                break;
+
+        }
+    }
+
+    private void showEditTeamNameDialog(final Team team) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.edit_team_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText name = (EditText) dialogView.findViewById(R.id.editName);
+        name.setText(team.getName());
+
+        dialogBuilder.setTitle(R.string.team_name);
+        dialogBuilder.setMessage(R.string.enter_team_name);
+        dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                team.setName(name.getText().toString());
+                updateUI();
+                dialog.dismiss();
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
     }
 }

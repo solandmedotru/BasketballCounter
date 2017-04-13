@@ -6,4 +6,10 @@
     <string name="free_throw">Free throw</string>
     <string name="team_b">Team B</string>
     <string name="clear_score">Clear score</string>
+    <string name="time_up">Time is Up!</string>
+    <string name="time_up_mesaage">The time is up. Add time if you want to continue the game!</string>
+    <string name="start_stop">Start/Stop</string>
+    <string name="reset_all">Reset all</string>
+    <string name="team_name">Team Name</string>
+    <string name="enter_team_name">Enter Team Name</string>
 </resources>

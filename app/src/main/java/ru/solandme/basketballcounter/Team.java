@@ -4,12 +4,13 @@ package ru.solandme.basketballcounter;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Team implements Parcelable{
+public class Team implements Parcelable {
     private int score;
     private String name;
 
-    public Team() {
+    public Team(String name) {
         score = 0;
+        this.name = name;
     }
 
     public int getScore() {

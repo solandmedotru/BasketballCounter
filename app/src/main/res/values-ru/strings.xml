@@ -7,4 +7,10 @@
     <string name="free_throw">Штрафной</string>
     <string name="team_a">Команда А</string>
     <string name="team_b">Команда Б</string>
+    <string name="time_up">Время вышло!</string>
+    <string name="time_up_mesaage">Время вышло! Добавьте время для продолжения игры!</string>
+    <string name="start_stop">Старт/Стоп</string>
+    <string name="enter_team_name">Введите название команды</string>
+    <string name="reset_all">Рестарт</string>
+    <string name="team_name">Название команды</string>
 </resources>
