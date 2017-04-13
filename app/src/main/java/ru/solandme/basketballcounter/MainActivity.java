@@ -8,7 +8,6 @@ import android.text.method.TextKeyListener;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import cn.iwgang.countdownview.CountdownView;
 
@@ -38,10 +37,6 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
         initialGame();
     }
 
-    private void initialTimer() {
-        mCvCountdownView = (CountdownView) findViewById(R.id.cv_countdownViewTest211);
-    }
-
     private void initialGame() {
         game = new Game();
         initialTeams();
@@ -51,21 +46,30 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
     private void initialTeams() {
         teamOne = new Team();
         teamOne.setName(getString(R.string.team_a));
+        scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
+
         teamTwo = new Team();
         teamTwo.setName(getString(R.string.team_b));
+        scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
+    }
+
+    private void initialTimer() {
+        mCvCountdownView = (CountdownView) findViewById(R.id.cv_countdownViewTest211);
     }
 
     public void addPoints(Team team, int points) {
-        team.setScore(team.getScore() + points);
+        if (team.getScore() + points >= 0) team.setScore(team.getScore() + points);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("scoreTeamA", teamOne.getScore());
-        outState.putInt("scoreTeamB", teamTwo.getScore());
-        outState.putLong("timer", game.getTimeCounter());
-        outState.putInt("period", game.getPeriod());
+
+        game.setTimeCounter(mCvCountdownView.getRemainTime());
+        outState.putParcelable("TeamOne", teamOne);
+        outState.putParcelable("TeamTwo", teamTwo);
+        outState.putParcelable("Game", game);
+        outState.putBoolean("isTimerRunning", isTimerRunning);
     }
 
     @Override
@@ -75,10 +79,19 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
         if (savedInstanceState == null) {
             initialGame();
         } else {
-            teamOne.setScore(savedInstanceState.getInt("scoreTeamA"));
+            game = savedInstanceState.getParcelable("Game");
+            teamOne = savedInstanceState.getParcelable("TeamOne");
+            teamTwo = savedInstanceState.getParcelable("TeamTwo");
+
             scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
-            teamTwo.setScore(savedInstanceState.getInt("scoreTeamB"));
             scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
+            isTimerRunning = savedInstanceState.getBoolean("isTimerRunning");
+
+            if(isTimerRunning){
+                mCvCountdownView.start(game.getTimeCounter());
+            } else {
+                mCvCountdownView.updateShow(game.getTimeCounter());
+            }
         }
     }
 
@@ -107,6 +120,31 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
                 break;
             case R.id.btnPlusOnePointToTeamTwo:
                 addPoints(teamTwo, 1);
+                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
+                break;
+
+            case R.id.btnMinusThreePointFromTeamOne:
+                addPoints(teamOne, -3);
+                scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
+                break;
+            case R.id.btnMinusTwoPointFromTeamOne:
+                addPoints(teamOne, -2);
+                scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
+                break;
+            case R.id.btnMinusOnePointFromTeamOne:
+                addPoints(teamOne, -1);
+                scoreTeamOne.setText(Integer.toString(teamOne.getScore()));
+                break;
+            case R.id.btnMinusThreePointFromTeamTwo:
+                addPoints(teamTwo, -3);
+                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
+                break;
+            case R.id.btnMinusTwoPointFromTeamTwo:
+                addPoints(teamTwo, -2);
+                scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
+                break;
+            case R.id.btnMinusOnePointFromTeamTwo:
+                addPoints(teamTwo, -1);
                 scoreTeamTwo.setText(Integer.toString(teamTwo.getScore()));
                 break;
 //            case R.id.btnClearScore:
